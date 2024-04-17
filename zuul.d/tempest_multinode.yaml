@@ -72,3 +72,31 @@
       - ^scenarios/centos-9/ci.yml
       - ^scenarios/centos-9/ceph_backends.yml
       - ^zuul.d/tempest_multinode.yaml
+
+- job:
+    name: periodic-podified-multinode-edpm-deployment-antelope-ocp-crc-cs9-tempest-api
+    parent: periodic-podified-multinode-edpm-deployment-antelope-ocp-crc-cs9
+    vars:
+      cifmw_test_operator_tempest_include_list: |
+        ^tempest.api.identity.*.v3
+        # ^tempest.api.volume
+        ^tempest.api.network.*
+        ^tempest.api.compute.*
+        ^manila_tempest_tests.tests.api
+        ^ironic_tempest_plugin.tests.api
+      cifmw_test_operator_tempest_exclude_list: |
+        # identity
+        test_credentials_create_get_update_delete
+        test_credentials_list_delete
+        test_rescope_token
+        test_update_user_password
+        # compute
+        tempest.api.compute.volumes.test_volumes_list
+        tempest.api.compute.admin.test_volume.AttachSCSIVolumeTestJSON
+        tempest.api.compute.admin.test_volumes_negative.VolumesAdminNegativeTest
+        tempest.api.compute.servers.test_device_tagging
+        tempest.api.compute.volumes.test_volumes_get
+        tempest.api.compute.servers.test_server_rescue.ServerBootFromVolumeStableRescueTest
+        tempest.api.compute.admin.test_live_migration.LiveMigrationTest.test_live_migration_with_trunk
+        tempest.api.compute.admin.test_auto_allocate_network.AutoAllocateNetworkTest.test_server_multi_create_auto_allocate
+        tempest.api.compute.servers.test_server_rescue.ServerStableDeviceRescueTestIDE
